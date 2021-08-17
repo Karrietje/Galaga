@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Galaga">
+      <UniqueIdentifier>{5b61da43-c248-4e28-b3e7-57f4a96d15cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Galaga\Components">
+      <UniqueIdentifier>{03a2b9d6-4e4b-4505-b4d1-1cf1e32ace8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Galaga\Components\Enemies">
+      <UniqueIdentifier>{830faf30-11a3-4194-97a4-0cd447010db7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Galaga\Components\Friendly">
+      <UniqueIdentifier>{be892320-1819-44a8-bfd2-d571b6edfe96}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="MissileManager.cpp">
+      <Filter>Galaga</Filter>
+    </ClCompile>
+    <ClCompile Include="GalagaManagerComponent.cpp">
+      <Filter>Galaga\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ZakoComponent.cpp">
+      <Filter>Galaga\Components\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="MissileComponent.cpp">
+      <Filter>Galaga\Components\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceShipComponent.cpp">
+      <Filter>Galaga\Components\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="AIComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GalagaCommands.h">
+      <Filter>Galaga</Filter>
+    </ClInclude>
+    <ClInclude Include="MissileManager.h">
+      <Filter>Galaga</Filter>
+    </ClInclude>
+    <ClInclude Include="GalagaManagerComponent.h">
+      <Filter>Galaga\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GalagaComponents.h">
+      <Filter>Galaga\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ZakoComponent.h">
+      <Filter>Galaga\Components\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MissileComponent.h">
+      <Filter>Galaga\Components\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceShipComponent.h">
+      <Filter>Galaga\Components\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="AIComponent.h" />
+  </ItemGroup>
+</Project>
