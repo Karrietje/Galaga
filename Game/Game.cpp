@@ -12,7 +12,7 @@
 #include "TextComponent.h"
 #include "TransformComponent.h"
 #include "GalagaManagerComponent.h"
-#include <vld.h>
+//#include <vld.h>
 
 using namespace dae;
 
