@@ -29,16 +29,52 @@ void dae::GalagaManagerComponent::Initialize()
 
 	m_pGalagaScene->Add(pBack, 0);
 
-	GameObject* pZako = new GameObject();
+	GameObject* pFront = new GameObject();
 
-	ZakoComponent* pZakoComponent = new ZakoComponent();
-	pZako->AddComponent(ComponentType::ZakoComponent, pZakoComponent);
+	TriggerComponent* pFrontTrigger = PhysicsManager::GetInstance().CreateTriggerComponent({ 0, 479 }, { 640, 1 }, Tag::Front, {});
+	pFront->AddComponent(ComponentType::TriggerComponent, pFrontTrigger);
 
-	pZako->GetTransform()->SetPosition({ 100, 100 });
+	m_pGalagaScene->Add(pFront, 0);
 
-	m_pGalagaScene->Add(pZako, 4);
+	GameObject* pTractorBeamFront = new GameObject();
 
-	m_Initialized = true;
+	TriggerComponent* pTractorBeamFrontTrigger = PhysicsManager::GetInstance().CreateTriggerComponent({ 0, 320 }, { 640, 1 }, Tag::TractorBeamFront, {});
+	pTractorBeamFront->AddComponent(ComponentType::TriggerComponent, pTractorBeamFrontTrigger);
+
+	m_pGalagaScene->Add(pTractorBeamFront, 0);
+
+	for (int i{}; i < 4; i++)
+	{
+		GameObject* pZako = new GameObject();
+
+		EnemyComponent* pEnemyComponent = new EnemyComponent(EnemyType::Boss);
+		pZako->AddComponent(ComponentType::ZakoComponent, pEnemyComponent);
+
+		pZako->GetTransform()->SetPosition({ 196 + (i * 32), 32 });
+		m_pGalagaScene->Add(pZako, 4);
+	}
+
+	for (int i{}; i < 10; i++)
+	{
+		GameObject* pGoei = new GameObject();
+
+		EnemyComponent* pEnemyComponent = new EnemyComponent(EnemyType::Goei);
+		pGoei->AddComponent(ComponentType::ZakoComponent, pEnemyComponent);
+
+		pGoei->GetTransform()->SetPosition({ 100 + (i * 32), 64 });
+		m_pGalagaScene->Add(pGoei, 4);
+	}
+
+	for (int i{}; i < 10; i++)
+	{
+		GameObject* pGoei = new GameObject();
+
+		EnemyComponent* pEnemyComponent = new EnemyComponent(EnemyType::Zako);
+		pGoei->AddComponent(ComponentType::ZakoComponent, pEnemyComponent);
+
+		pGoei->GetTransform()->SetPosition({ 100 + (i * 32), 96 });
+		m_pGalagaScene->Add(pGoei, 4);
+	}
 }
 
 void dae::GalagaManagerComponent::Update(float)

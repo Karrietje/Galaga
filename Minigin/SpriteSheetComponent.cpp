@@ -8,7 +8,7 @@
 dae::SpriteSheetComponent::SpriteSheetComponent()
 	:m_CurrentColumn{0}
 	,m_CurrentRow{0}
-	,m_CurrentSpriteState{SpriteState::BottomRight}
+	,m_CurrentSpriteState{SpriteState::DownRight}
 	, m_ElapsedTime{}
 	, m_FrameTime{0.5f}
 	, m_pTexture{}

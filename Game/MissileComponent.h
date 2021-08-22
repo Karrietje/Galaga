@@ -6,7 +6,7 @@ namespace dae
     class MissileComponent final : public Component
     {
     public:
-        MissileComponent();
+        MissileComponent(bool enemyMissile);
 
         virtual void Initialize() override;
         virtual void Update(float elapsedSec) override;
@@ -15,7 +15,7 @@ namespace dae
         virtual void Trigger(Tag triggerTag, GameObject* pGameObject) override;
     
     private:
-        bool m_IsHit;
+        bool m_EnemyMissile;
         float m_ShotSpeed;
     };
 }

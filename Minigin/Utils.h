@@ -16,5 +16,10 @@ enum class MovementDirection
 
 enum class Tag
 {
-	Spaceship, Missile, Enemy, Back
+	Spaceship, Missile, EnemyMissile, Enemy, TractorBeam, Back, Front, TractorBeamFront
+};
+
+enum class EnemyType
+{
+	Zako, Goei, Boss
 };

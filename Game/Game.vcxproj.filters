@@ -22,16 +22,18 @@
     <ClCompile Include="GalagaManagerComponent.cpp">
       <Filter>Galaga\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ZakoComponent.cpp">
-      <Filter>Galaga\Components\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="MissileComponent.cpp">
       <Filter>Galaga\Components\Friendly</Filter>
     </ClCompile>
     <ClCompile Include="SpaceShipComponent.cpp">
       <Filter>Galaga\Components\Friendly</Filter>
     </ClCompile>
-    <ClCompile Include="AIComponent.cpp" />
+    <ClCompile Include="AIComponent.cpp">
+      <Filter>Galaga\Components\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyComponent.cpp">
+      <Filter>Galaga\Components\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GalagaCommands.h">
@@ -46,15 +48,17 @@
     <ClInclude Include="GalagaComponents.h">
       <Filter>Galaga\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ZakoComponent.h">
-      <Filter>Galaga\Components\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="MissileComponent.h">
       <Filter>Galaga\Components\Friendly</Filter>
     </ClInclude>
     <ClInclude Include="SpaceShipComponent.h">
       <Filter>Galaga\Components\Friendly</Filter>
     </ClInclude>
-    <ClInclude Include="AIComponent.h" />
+    <ClInclude Include="AIComponent.h">
+      <Filter>Galaga\Components\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyComponent.h">
+      <Filter>Galaga\Components\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

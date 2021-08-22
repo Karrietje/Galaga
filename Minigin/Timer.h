@@ -3,7 +3,7 @@
 
 namespace dae
 {
-	class Time final : public Singleton<Time>
+	class Timer final : public Singleton<Timer>
 	{
 	public:
 		void Update(float elapsedSec);
@@ -15,16 +15,16 @@ namespace dae
 		float m_ElapsedSec;
 		float m_MsPerUpdate;
 
-		Time();
-		friend class Singleton<Time>;
+		Timer();
+		friend class Singleton<Timer>;
 	};
 
-	float Time::GetMsPerUpdate() const
+	float Timer::GetMsPerUpdate() const
 	{
 		return m_MsPerUpdate;
 	}
 
-	float Time::GetElapsed() const
+	float Timer::GetElapsed() const
 	{
 		return m_ElapsedSec;
 	}

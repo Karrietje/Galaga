@@ -20,6 +20,7 @@ void Initialize();
 
 int main(int, char* []) 
 {
+	srand((unsigned int)time(nullptr));
 	Minigin engine;
 	engine.Initialize();
 

@@ -72,9 +72,6 @@
     <ClInclude Include="Component.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Time</Filter>
-    </ClInclude>
     <ClInclude Include="TransformComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -165,6 +162,9 @@
     <ClInclude Include="TriggerComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -202,9 +202,6 @@
     </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Time</Filter>
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Components</Filter>
@@ -280,6 +277,9 @@
     </ClCompile>
     <ClCompile Include="TriggerComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Time</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

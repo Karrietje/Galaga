@@ -280,7 +280,7 @@ SDL2main.lib
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureComponent.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="TriggerComponent.h" />
     <ClInclude Include="Utils.h" />
@@ -362,7 +362,7 @@ SDL2main.lib
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="TriggerComponent.cpp" />
   </ItemGroup>

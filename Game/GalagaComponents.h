@@ -3,5 +3,5 @@
 
 #include "SpaceShipComponent.h"
 #include "MissileComponent.h"
-#include "ZakoComponent.h"
+#include "EnemyComponent.h"
 #include "AIComponent.h"

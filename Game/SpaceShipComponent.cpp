@@ -31,12 +31,12 @@ void dae::SpaceShipComponent::Initialize()
 
 	m_pGameObject->AddComponent(ComponentType::SpriteSheetComponent, spriteComponent);
 
-	TriggerComponent* pTriggerComponent = PhysicsManager::GetInstance().CreateTriggerComponent({ 0.f, 0.f }, { 32.f, 32.f }, Tag::Spaceship, { Tag::Enemy });
+	TriggerComponent* pTriggerComponent = PhysicsManager::GetInstance().CreateTriggerComponent({ 0.f, 0.f }, { 32.f, 32.f }, Tag::Spaceship, { Tag::Enemy, Tag::EnemyMissile, Tag::TractorBeam });
 	m_pGameObject->AddComponent(ComponentType::TriggerComponent, pTriggerComponent);
 
 	m_pGameObject->GetTransform()->SetPosition({ 300, 400 });
 
-	MissileManager::GetInstance().SubscribeSpaceship(this);
+	MissileManager::GetInstance().SubscribeGameObject(m_pGameObject);
 
 	MoveRightDownCommand* pMoveRightDown = new MoveRightDownCommand(this);
 	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_d, VK_PAD_DPAD_RIGHT, InputType::KeyDown, 0 }, pMoveRightDown);
@@ -52,8 +52,6 @@ void dae::SpaceShipComponent::Initialize()
 
 	ShootCommand* pShoot = new ShootCommand(this);
 	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_SPACE, VK_PAD_A, InputType::KeyDown, 0 }, pShoot);
-
-	m_Initialized = true;
 }
 
 void dae::SpaceShipComponent::Update(float elapsedSec)
@@ -84,6 +82,22 @@ void dae::SpaceShipComponent::Update(float elapsedSec)
 
 void dae::SpaceShipComponent::Render(glm::vec2)
 {
+}
+
+void dae::SpaceShipComponent::Trigger(Tag triggerTag, GameObject* pGameObject)
+{
+	switch (triggerTag)
+	{
+	case Tag::EnemyMissile:
+		pGameObject->SetActive(false);
+		break;
+	case Tag::Enemy:
+		break;
+	case Tag::TractorBeam:
+		break;
+	default:
+		break;
+	}
 }
 
 void dae::SpaceShipComponent::MoveKeyDown(MovementDirection direction)
@@ -121,5 +135,5 @@ void dae::SpaceShipComponent::MoveKeyUp(MovementDirection direction)
 
 void dae::SpaceShipComponent::ShootMissile()
 {
-	MissileManager::GetInstance().ShootMissile(this);
+	MissileManager::GetInstance().ShootMissile(m_pGameObject);
 }

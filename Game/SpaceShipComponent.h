@@ -12,6 +12,8 @@ namespace dae
 		virtual void Update(float elapsedSec) override;
 		virtual void Render(glm::vec2 position) override;
 
+		virtual void Trigger(Tag triggerTag, GameObject* pGameObject) override;
+
 		void MoveKeyDown(MovementDirection direction);
 		void MoveKeyUp(MovementDirection direction);
 		void ShootMissile();

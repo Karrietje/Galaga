@@ -14,9 +14,9 @@ namespace dae
 			Up,
 			UpRight,
 			Right,
-			BottomRight,
-			Bottom,
-			BottomLeft,
+			DownRight,
+			Down,
+			DownLeft,
 			Left,
 			UpLeft
 		};

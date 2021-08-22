@@ -1,12 +1,12 @@
 #include "MiniginPCH.h"
-#include "Time.h"
+#include "Timer.h"
 
-void dae::Time::Update(float elapsedSec)
+void dae::Timer::Update(float elapsedSec)
 {
 	m_ElapsedSec = elapsedSec;
 }
 
-dae::Time::Time()
+dae::Timer::Timer()
 	: m_ElapsedSec{0.f}
 	, m_MsPerUpdate{1.f / 60.f}
 {

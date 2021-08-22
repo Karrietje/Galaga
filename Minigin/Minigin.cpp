@@ -8,7 +8,7 @@
 #include <SDL.h>
 #include "GameObject.h"
 #include "Scene.h"
-#include "Time.h"
+#include "Timer.h"
 #include "AudioLocator.h"
 #include "AudioLogger.h"
 #include "AudioService.h"
@@ -84,13 +84,13 @@ void dae::Minigin::Run()
 		lag += deltaTime;
 		doContinue = input.ProcessInput();
 			
-		while (lag >= Time::GetInstance().GetMsPerUpdate())
+		while (lag >= Timer::GetInstance().GetMsPerUpdate())
 		{
-			Time::GetInstance().Update(Time::GetInstance().GetMsPerUpdate());
-			sceneManager.Update(Time::GetInstance().GetElapsed());
-			physicsManager.Update(Time::GetInstance().GetElapsed());
+			Timer::GetInstance().Update(Timer::GetInstance().GetMsPerUpdate());
+			sceneManager.Update(Timer::GetInstance().GetElapsed());
+			physicsManager.Update(Timer::GetInstance().GetElapsed());
 			sceneManager.LateUpdate();
-			lag -= Time::GetInstance().GetMsPerUpdate();
+			lag -= Timer::GetInstance().GetMsPerUpdate();
 		}
 		renderer.Render();
 	}

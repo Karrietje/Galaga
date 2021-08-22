@@ -44,9 +44,9 @@ void dae::GameObject::Update(float elapsedSec)
 	for (std::pair<ComponentType, Component*> component : m_pComponents)
 	{
 		if (!component.second->IsInitialized())
-			component.second->Initialize();
+			component.second->RootInitialize();
 
-		component.second->Update(elapsedSec);
+		component.second->RootUpdate(elapsedSec);
 	}
 }
 
@@ -57,7 +57,7 @@ void dae::GameObject::Render() const
 
 	for (std::pair<ComponentType, Component*> component : m_pComponents)
 	{
-		component.second->Render(m_pTransform->GetWorldPosition());
+		component.second->RootRender(m_pTransform->GetWorldPosition());
 	}
 }
 

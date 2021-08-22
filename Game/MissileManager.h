@@ -7,14 +7,14 @@ namespace dae
 {
 	class Scene;
 	class MissileComponent;
-	class SpaceShipComponent;
+	class GameObject;
 	class MissileManager final : public Singleton<MissileManager>
 	{
 	public:
 		inline void SetScene(Scene* pScene);
 
-		void SubscribeSpaceship(SpaceShipComponent* pSpaceShip);
-		void ShootMissile(SpaceShipComponent* pSpaceShip);
+		void SubscribeGameObject(GameObject* pGameObject, bool isEnemy = false);
+		void ShootMissile(GameObject* pGameObject);
 
 	private:
 		friend class Singleton<MissileManager>;
@@ -22,7 +22,7 @@ namespace dae
 		
 		Scene* m_pScene;
 
-		std::map<SpaceShipComponent*, std::vector<MissileComponent*>> m_pMissiles;
+		std::map<GameObject*, std::vector<MissileComponent*>> m_pMissiles;
 	};
 
 	inline void dae::MissileManager::SetScene(Scene* pScene)

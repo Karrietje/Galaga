@@ -37,3 +37,8 @@ void dae::SceneManager::SetCurrentScene(const std::string& name)
 {
 	m_CurrentScene = name;
 }
+
+dae::Scene* dae::SceneManager::GetCurrentScene() const
+{
+	return m_Scenes.at(m_CurrentScene);
+}
