@@ -8,6 +8,9 @@
 
 dae::EndScreenComponent::EndScreenComponent(Scene* pScene)
 	: m_pScene{pScene}
+	, m_pHitMissRatioText{nullptr}
+	, m_pShotsFiredText{nullptr}
+	, m_pShotsHitText{nullptr}
 {
 }
 
