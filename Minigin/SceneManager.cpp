@@ -2,6 +2,22 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+void dae::SceneManager::Initialize()
+{
+	for (std::pair<std::string, Scene*> scene : m_Scenes)
+	{
+		scene.second->Initialize();
+	}
+}
+
+void dae::SceneManager::PostInitialize()
+{
+	for (std::pair<std::string, Scene*> scene : m_Scenes)
+	{
+		scene.second->PostInitialize();
+	}
+}
+
 void dae::SceneManager::Update(float elapsedSec)
 {
 	m_Scenes[m_CurrentScene]->Update(elapsedSec);
@@ -36,9 +52,9 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 void dae::SceneManager::SetCurrentScene(const std::string& name)
 {
 	m_CurrentScene = name;
-}
+	while (!m_Scenes[m_CurrentScene]->IsInitialized())
+		m_Scenes[m_CurrentScene]->Initialize();
 
-dae::Scene* dae::SceneManager::GetCurrentScene() const
-{
-	return m_Scenes.at(m_CurrentScene);
+	while (!m_Scenes[m_CurrentScene]->IsPostInitialized())
+		m_Scenes[m_CurrentScene]->PostInitialize();
 }

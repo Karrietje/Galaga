@@ -31,7 +31,7 @@ void dae::AudioService::AddSoundEffect(int id, const std::string& audioPath)
 	m_pSoundEffects.push_back(Mix_LoadWAV((ResourceManager::GetInstance().GetDataPath() + audioPath).c_str()));
 }
 
-void dae::AudioService::PlaySound(int id)
+void dae::AudioService::Play(int id)
 {
 	for(size_t i{}; i < m_Infos.size(); i++)
 	{
@@ -45,6 +45,7 @@ void dae::AudioService::PlaySound(int id)
 void dae::AudioService::StopAll()
 {
 	Mix_HaltChannel(-1);
+	Mix_HaltMusic();
 }
 
 void dae::AudioService::Update()
@@ -60,7 +61,12 @@ void dae::AudioService::Update()
 			if (audio.SoundEffect)
 				Mix_PlayChannel(-1, m_pSoundEffects[audio.Location], 0);
 			else
-				Mix_PlayMusic(m_pMusic[audio.Location], audio.Loop);
+			{
+				if (audio.Loop)
+					Mix_PlayMusic(m_pMusic[audio.Location], -1);
+				else
+					Mix_PlayMusic(m_pMusic[audio.Location], 1);
+			}
 		}
 
 		mutex.unlock();

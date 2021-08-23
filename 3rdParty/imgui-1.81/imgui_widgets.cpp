@@ -39,7 +39,6 @@ Index of this file:
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
 #include "imgui_internal.h"
-#include <Windows.h>
 
 // System includes
 #include <ctype.h>      // toupper
@@ -48,6 +47,8 @@ Index of this file:
 #else
 #include <stdint.h>     // intptr_t
 #endif
+
+#include <Windows.h>
 
 //-------------------------------------------------------------------------
 // Warnings
@@ -6190,6 +6191,7 @@ void ImGui::EndListBox()
     ImGuiContext& g = *GImGui;
     ImGuiWindow* window = g.CurrentWindow;
     IM_ASSERT((window->Flags & ImGuiWindowFlags_ChildWindow) && "Mismatched BeginListBox/EndListBox calls. Did you test the return value of BeginListBox?");
+
     UNREFERENCED_PARAMETER(window);
 
     EndChildFrame();

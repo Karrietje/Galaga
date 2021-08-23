@@ -21,12 +21,10 @@ void dae::HealthObserver::Notify(Event event)
 			m_pHealth->LoseHealth();
 			if (m_pHealth->GetHealth() != 0)
 			{
-				std::cout << m_pSubject->GetGameObject()->GetName() << " loses HP!\n Remaining HP: " << m_pHealth->GetHealth() << '\n';
 				m_pHearts[m_pHealth->GetHealth()]->SetActive(false);
 			}
 			else
 			{
-				std::cout << m_pSubject->GetGameObject()->GetName() << " died!\n";
 				m_pSubject->GetGameObject()->SetActive(false);
 				m_pHearts[m_pHealth->GetHealth()]->SetActive(false);
 			}

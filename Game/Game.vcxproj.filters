@@ -13,6 +13,9 @@
     <Filter Include="Galaga\Components\Friendly">
       <UniqueIdentifier>{be892320-1819-44a8-bfd2-d571b6edfe96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Galaga\Observers">
+      <UniqueIdentifier>{a76bcf2a-df60-4dbf-80e3-5872f07ff7f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
@@ -33,6 +36,18 @@
     </ClCompile>
     <ClCompile Include="EnemyComponent.cpp">
       <Filter>Galaga\Components\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Galaga</Filter>
+    </ClCompile>
+    <ClCompile Include="BeginScreenComponent.cpp">
+      <Filter>Galaga\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ShotsObserver.cpp">
+      <Filter>Galaga\Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="EndScreenComponent.cpp">
+      <Filter>Galaga\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +74,18 @@
     </ClInclude>
     <ClInclude Include="EnemyComponent.h">
       <Filter>Galaga\Components\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Galaga</Filter>
+    </ClInclude>
+    <ClInclude Include="BeginScreenComponent.h">
+      <Filter>Galaga\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ShotsObserver.h">
+      <Filter>Galaga\Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="EndScreenComponent.h">
+      <Filter>Galaga\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

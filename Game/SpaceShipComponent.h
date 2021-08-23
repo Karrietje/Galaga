@@ -3,10 +3,12 @@
 
 namespace dae
 {
+	class GalagaManagerComponent;
+	class Scene;
 	class SpaceShipComponent : public Component
 	{
 	public:
-		SpaceShipComponent();
+		SpaceShipComponent(Scene* pScene, GalagaManagerComponent* pGalagaManagerComponent, int player);
 
 		virtual void Initialize() override;
 		virtual void Update(float elapsedSec) override;
@@ -24,10 +26,16 @@ namespace dae
 			Idle, MovingRight, MovingLeft, Dying
 		};
 
+		int m_Player;
+
 		float m_MoveSpeed;
 		float m_ShipWidth;
 		float m_MaxBoundary;
 
 		State m_State;
+
+		Scene* m_pScene;
+
+		GalagaManagerComponent* m_pGalagaManagerComponent;
 	};
 }

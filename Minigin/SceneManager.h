@@ -14,8 +14,8 @@ namespace dae
 
 		void SetCurrentScene(const std::string& name);
 
-		Scene* GetCurrentScene() const;
-
+		void Initialize();
+		void PostInitialize();
 		void Update(float elapsedSec);
 		void Render();
 		void LateUpdate();

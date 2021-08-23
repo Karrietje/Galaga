@@ -6,10 +6,11 @@ namespace dae
 {
 	class AIComponent;
 	class SpriteSheetComponent;
+	class Scene;
 	class EnemyComponent final : public Component
 	{
 	public:
-		EnemyComponent(EnemyType type);
+		EnemyComponent(EnemyType type, Scene* pScene, bool isControlled = false);
 
 		virtual void Initialize() override;
 		virtual void Update(float elapsedSec) override;
@@ -17,8 +18,16 @@ namespace dae
 
 		virtual void Trigger(Tag triggerTag, GameObject* pGameObject) override;
 
+		EnemyType GetType() const;
+
+		void Reset();
+
 	private:
+		bool m_IsControlled;
+
 		int m_CurrentSpriteSheet;
+
+		Scene* m_pScene;
 
 		EnemyType m_Type;
 

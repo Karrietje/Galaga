@@ -2,22 +2,32 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "MissileManager.h"
+#include "InputManager.h"
+#include "GalagaCommands.h"
+#include <iostream>
+#include <SDL.h>
 
-dae::AIComponent::AIComponent(EnemyType type)
-	: m_MissileTime{1.5f}
+float dae::AIComponent::m_StaticOriginalPosX{ 0.f };
+const float dae::AIComponent::m_IdleSpeed{ 32.f };
+const float dae::AIComponent::m_SpriteWidth{ 32.f };
+MovementDirection dae::AIComponent::m_OriginalDirection{ MovementDirection::Right };
+
+dae::AIComponent::AIComponent(Scene* pScene, EnemyType type, bool isControlled)
+	: m_IsControlled{isControlled}
+	, m_MissileTimer{0.f}
+	, m_MoveTimer{0.f}
+	, m_MissileTime{1.5f}
 	, m_BombingTime{2.f}
 	, m_ChangeDirectionTime{0.5f}
 	, m_TractorBeamTime{5.f}
-	, m_IdleSpeed{32.f}
 	, m_BombingSpeed{96.f}
 	, m_DiagonalBombingSpeed{96.f / sqrtf(2)}
-	, m_SpriteWidth{32.f}
 	, m_Boundaries{}
 	, m_ScreenBoundaries{0.f, 640.f}
 	, m_Type{type}
+	, m_pScene{pScene}
 	, m_AIState{AIState::Idle}
 	, m_Direction{MovementDirection::Right}
-	, m_OriginalDirection{MovementDirection::Right}
 {
 }
 
@@ -28,9 +38,15 @@ void dae::AIComponent::Initialize()
 
 	m_OriginalPosition = m_pGameObject->GetTransform()->GetPosition();
 
-	MissileManager::GetInstance().SubscribeGameObject(m_pGameObject, true);
+	MissileManager::GetInstance().SubscribeGameObject(m_pScene, m_pGameObject, true);
 
-	m_MoveTimer -= ((2 * (std::rand() % 10)) + 10);
+	m_MoveTimer -= (2 * (std::rand() % 5));
+
+	GalagaShootCommand* pGalagaShoot = new GalagaShootCommand(this);
+	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_DOWN, VK_PAD_DPAD_DOWN, InputType::KeyDown, 1 }, pGalagaShoot);
+
+	GalagaTractorBeamCommand* pGalagaTractorBeam = new GalagaTractorBeamCommand(this);
+	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_UP, VK_PAD_DPAD_UP, InputType::KeyDown, 1 }, pGalagaTractorBeam);
 }
 
 void dae::AIComponent::Update(float elapsedSec)
@@ -38,28 +54,7 @@ void dae::AIComponent::Update(float elapsedSec)
 	m_MoveTimer += elapsedSec;
 	glm::vec2 newPos{};
 
-	float deltaPos{ m_IdleSpeed * elapsedSec };
-	switch (m_OriginalDirection)
-	{
-	case MovementDirection::Right:
-		m_OriginalPosition.x += deltaPos;
-		if (m_OriginalPosition.x > m_Boundaries.y)
-		{
-			m_OriginalDirection = MovementDirection::Left;
-			m_OriginalPosition -= deltaPos;
-		}
-		break;
-	case MovementDirection::Left:
-		m_OriginalPosition.x -= deltaPos;
-		if (m_OriginalPosition.x < m_Boundaries.x)
-		{
-			m_OriginalDirection = MovementDirection::Right;
-			m_OriginalPosition += deltaPos;
-		}
-		break;
-	default:
-		break;
-	}
+	m_OriginalPosition.x = m_Boundaries.x + m_StaticOriginalPosX;
 
 	switch (m_AIState)
 	{
@@ -123,6 +118,37 @@ void dae::AIComponent::Trigger(Tag triggerTag, GameObject*)
 	}
 }
 
+void dae::AIComponent::UpdateOriginalPos(float elapsedSec)
+{
+	float deltaPos{ m_IdleSpeed * elapsedSec };
+	switch (m_OriginalDirection)
+	{
+	case MovementDirection::Right:
+		m_StaticOriginalPosX += deltaPos;
+		if (m_StaticOriginalPosX > (m_SpriteWidth * 5))
+		{
+			m_OriginalDirection = MovementDirection::Left;
+			m_StaticOriginalPosX -= deltaPos;
+		}
+		break;
+	case MovementDirection::Left:
+		m_StaticOriginalPosX -= deltaPos;
+		if (m_StaticOriginalPosX < 0.f)
+		{
+			m_OriginalDirection = MovementDirection::Right;
+			m_StaticOriginalPosX += deltaPos;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void dae::AIComponent::ChangeControl(bool control)
+{
+	m_IsControlled = control;
+}
+
 dae::AIComponent::AIState dae::AIComponent::GetState() const
 {
 	return m_AIState;
@@ -134,6 +160,12 @@ MovementDirection dae::AIComponent::GetDirection() const
 		return MovementDirection::Up;
 
 	return m_Direction;
+}
+
+void dae::AIComponent::Reset()
+{
+	m_pGameObject->GetTransform()->SetPosition(m_OriginalPosition);
+	m_AIState = AIState::Idle;
 }
 
 void dae::AIComponent::MissileHandling(float elapsedSec)
@@ -148,10 +180,10 @@ void dae::AIComponent::MissileHandling(float elapsedSec)
 
 glm::vec2 dae::AIComponent::Idle(float)
 {
-	if (m_MoveTimer > m_BombingTime)
+	if (!m_IsControlled && (m_MoveTimer > m_BombingTime))
 	{
 		m_MoveTimer = 0.f;
-		if ((rand() % 20) == 0)
+		if ((rand() % 10) == 0)
 		{
 			if (m_Type == EnemyType::Boss)
 			{
@@ -537,4 +569,19 @@ glm::vec2 dae::AIComponent::Returning(float elapsedSec)
 	}
 
 	return newPos;
+}
+
+void dae::AIComponent::ShootMissile()
+{
+	if (m_pGameObject->IsActive() && m_IsControlled && (m_AIState == AIState::Idle))
+		MissileManager::GetInstance().ShootMissile(m_pGameObject);
+}
+
+void dae::AIComponent::StartTractorBeamRun()
+{
+	if (m_pGameObject->IsActive() && m_IsControlled && (m_AIState == AIState::Idle))
+	{
+		m_AIState = AIState::Moving;
+		m_Direction = MovementDirection::Down;
+	}
 }

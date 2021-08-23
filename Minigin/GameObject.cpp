@@ -36,6 +36,24 @@ void dae::GameObject::Trigger(Tag triggerTag, GameObject* pGameObject)
 	}
 }
 
+void dae::GameObject::Initialize()
+{
+	for (std::pair<ComponentType, Component*> component : m_pComponents)
+	{
+		while (!component.second->m_Initialized)
+			component.second->RootInitialize();
+	}
+}
+
+void dae::GameObject::PostInitialize()
+{
+	for (std::pair<ComponentType, Component*> component : m_pComponents)
+	{
+		while (!component.second->m_PostInitialized)
+			component.second->RootPostInitialize();
+	}
+}
+
 void dae::GameObject::Update(float elapsedSec)
 {
 	if (!IsActive())
@@ -43,8 +61,11 @@ void dae::GameObject::Update(float elapsedSec)
 
 	for (std::pair<ComponentType, Component*> component : m_pComponents)
 	{
-		if (!component.second->IsInitialized())
+		while (!component.second->m_Initialized)
 			component.second->RootInitialize();
+
+		while (!component.second->m_PostInitialized)
+			component.second->RootPostInitialize();
 
 		component.second->RootUpdate(elapsedSec);
 	}

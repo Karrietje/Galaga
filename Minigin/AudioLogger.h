@@ -10,7 +10,7 @@ namespace dae
 		virtual ~AudioLogger();
 		virtual void AddMusic(bool isLoop, int id, const std::string& audioPath) override;
 		virtual void AddSoundEffect(int id, const std::string& audioPath) override;
-		virtual void PlaySound(int id) override;
+		virtual void Play(int id) override;
 		virtual void StopAll() override;
 
 	private:

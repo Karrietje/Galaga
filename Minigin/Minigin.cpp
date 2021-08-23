@@ -73,6 +73,9 @@ void dae::Minigin::Run()
 	auto& input = InputManager::GetInstance();
 	auto& physicsManager = PhysicsManager::GetInstance();
 
+	sceneManager.Initialize();
+	sceneManager.PostInitialize();
+
 	auto lastTime = high_resolution_clock::now();
 	float lag = 0.f;
 	bool doContinue = true;

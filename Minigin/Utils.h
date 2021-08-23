@@ -1,12 +1,12 @@
 #pragma once
 enum class ComponentType
 {
-	TextComponent, TextureComponent, FPSComponent, SubjectComponent, HealthComponent, PointComponent, SpriteSheetComponent, GalagaComponent, SpaceShipComponent, TriggerComponent, MissileComponent, ZakoComponent, AIComponent
+	TextComponent, TextureComponent, FPSComponent, SubjectComponent, HealthComponent, PointComponent, SpriteSheetComponent, GalagaManagerComponent, SpaceShipComponent, TriggerComponent, MissileComponent, EnemyComponent, AIComponent, BeginScreenComponent, EndScreenComponent
 };
 
 enum class Event
 {
-	Kill, ColorChange, KillByFlyingDisc, RemainingDisc, CatchingSlickSam
+	Kill, ZakoKill, ZakoDivingKill, GoeiKill, GoeiDivingKill, BossKill, BossDivingKill, Shot, Hit
 };
 
 enum class MovementDirection

@@ -1,6 +1,7 @@
 #pragma once
 #include "Command.h"
 #include "SpaceShipComponent.h"
+#include "AIComponent.h"
 
 class MoveRightDownCommand final : public Command
 {
@@ -60,9 +61,39 @@ public:
 	ShootCommand(SpaceShipComponent* pSpaceship) : m_pSpaceShip{pSpaceship} {}
 	virtual void Execute() override
 	{
-		m_pSpaceShip->ShootMissile();
+		if (m_pSpaceShip->GetGameObject()->IsActive())
+		{
+			m_pSpaceShip->ShootMissile();
+			m_pSpaceShip->GetGameObject()->GetComponent<SubjectComponent>(ComponentType::SubjectComponent)->Notify(Event::Shot);
+		}
 	}
 
 private:
 	SpaceShipComponent* m_pSpaceShip;
+};
+
+class GalagaShootCommand final : public Command
+{
+public:
+	GalagaShootCommand(AIComponent* pGalaga) : m_pGalaga{ pGalaga } {}
+	virtual void Execute() override
+	{
+		m_pGalaga->ShootMissile();
+	}
+
+private:
+	AIComponent* m_pGalaga;
+};
+
+class GalagaTractorBeamCommand final : public Command
+{
+public:
+	GalagaTractorBeamCommand(AIComponent* pGalaga) : m_pGalaga{ pGalaga } {}
+	virtual void Execute() override
+	{
+		m_pGalaga->StartTractorBeamRun();
+	}
+
+private:
+	AIComponent* m_pGalaga;
 };

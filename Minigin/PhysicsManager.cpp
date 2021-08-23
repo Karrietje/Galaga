@@ -127,6 +127,6 @@ dae::TriggerComponent* dae::PhysicsManager::CreateTriggerComponent(const glm::ve
 }
 
 dae::PhysicsManager::PhysicsManager()
-	: m_DrawDebug{true}
+	: m_DrawDebug{false}
 {
 }

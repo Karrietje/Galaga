@@ -180,22 +180,35 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AIComponent.cpp" />
+    <ClCompile Include="BeginScreenComponent.cpp" />
+    <ClCompile Include="EndScreenComponent.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GalagaManagerComponent.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MissileComponent.cpp" />
     <ClCompile Include="MissileManager.cpp" />
+    <ClCompile Include="ShotsObserver.cpp" />
     <ClCompile Include="SpaceShipComponent.cpp" />
     <ClCompile Include="EnemyComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIComponent.h" />
+    <ClInclude Include="BeginScreenComponent.h" />
+    <ClInclude Include="EndScreenComponent.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GalagaCommands.h" />
     <ClInclude Include="GalagaComponents.h" />
     <ClInclude Include="GalagaManagerComponent.h" />
     <ClInclude Include="MissileComponent.h" />
     <ClInclude Include="MissileManager.h" />
+    <ClInclude Include="ShotsObserver.h" />
     <ClInclude Include="SpaceShipComponent.h" />
     <ClInclude Include="EnemyComponent.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Minigin\Minigin.vcxproj">
+      <Project>{41b0ec47-d48c-4b0f-951b-d98595ffae0a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

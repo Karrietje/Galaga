@@ -24,10 +24,10 @@ void dae::AudioLogger::AddSoundEffect(int id, const std::string& audioPath)
 		m_pAudioService->AddSoundEffect(id, audioPath);
 }
 
-void dae::AudioLogger::PlaySound(int id)
+void dae::AudioLogger::Play(int id)
 {
 	if (!m_IsMuted)
-		m_pAudioService->PlaySound(id);
+		m_pAudioService->Play(id);
 }
 
 void dae::AudioLogger::StopAll()

@@ -26,6 +26,12 @@ void dae::Component::RootInitialize()
 	m_Initialized = true;
 }
 
+void dae::Component::RootPostInitialize()
+{
+	PostInitialize();
+	m_PostInitialized = true;
+}
+
 void dae::Component::RootUpdate(float elapsedSec)
 {
 	if (m_IsActive)

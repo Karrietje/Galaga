@@ -5,13 +5,20 @@
 #include "InputManager.h"
 #include "PhysicsManager.h"
 #include "MissileManager.h"
+#include "GalagaManagerComponent.h"
+#include "Audio.h"
+#include "AudioLocator.h"
 #include <SDL.h>
+#include <string>
 
-dae::SpaceShipComponent::SpaceShipComponent()
-	: m_MoveSpeed{500.f}
+dae::SpaceShipComponent::SpaceShipComponent(Scene* pScene, GalagaManagerComponent* pGalagaManagerComponent, int player)
+	: m_Player{player}
+	, m_MoveSpeed{500.f}
 	, m_ShipWidth{32.f}
 	, m_MaxBoundary{640.f}
 	, m_State{State::Idle}
+	, m_pScene{pScene}
+	, m_pGalagaManagerComponent{pGalagaManagerComponent}
 {
 }
 
@@ -24,7 +31,7 @@ void dae::SpaceShipComponent::Initialize()
 
 	spriteInfo.SheetInfo[SpriteSheetComponent::SpriteState::Up] = std::make_pair(0, 1);
 
-	std::string spriteName{ "Sprites/Spaceship.png" };
+	std::string spriteName{ "Sprites/Spaceship" + std::to_string(m_Player) + ".png" };
 	spriteComponent->SetSprite(spriteName, spriteInfo);
 	spriteComponent->SetSpriteState(SpriteSheetComponent::SpriteState::Up);
 	spriteComponent->SetScale(2.f);
@@ -34,24 +41,25 @@ void dae::SpaceShipComponent::Initialize()
 	TriggerComponent* pTriggerComponent = PhysicsManager::GetInstance().CreateTriggerComponent({ 0.f, 0.f }, { 32.f, 32.f }, Tag::Spaceship, { Tag::Enemy, Tag::EnemyMissile, Tag::TractorBeam });
 	m_pGameObject->AddComponent(ComponentType::TriggerComponent, pTriggerComponent);
 
-	m_pGameObject->GetTransform()->SetPosition({ 300, 400 });
-
-	MissileManager::GetInstance().SubscribeGameObject(m_pGameObject);
+	MissileManager::GetInstance().SubscribeGameObject(m_pScene, m_pGameObject);
 
 	MoveRightDownCommand* pMoveRightDown = new MoveRightDownCommand(this);
-	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_d, VK_PAD_DPAD_RIGHT, InputType::KeyDown, 0 }, pMoveRightDown);
+	InputManager::GetInstance().AddCommand(ControllerInput{ (m_Player == 0 ? SDLK_d : SDLK_RIGHT), VK_PAD_DPAD_RIGHT, InputType::KeyDown, m_Player }, pMoveRightDown);
 
 	MoveRightUpCommand* pMoveRightUp = new MoveRightUpCommand(this);
-	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_d, VK_PAD_DPAD_RIGHT, InputType::KeyUp, 0 }, pMoveRightUp);
+	InputManager::GetInstance().AddCommand(ControllerInput{ (m_Player == 0 ? SDLK_d : SDLK_RIGHT), VK_PAD_DPAD_RIGHT, InputType::KeyUp, m_Player }, pMoveRightUp);
 
 	MoveLeftDownCommand* pMoveLeftDown = new MoveLeftDownCommand(this);
-	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_a, VK_PAD_DPAD_LEFT, InputType::KeyDown, 0 }, pMoveLeftDown);
+	InputManager::GetInstance().AddCommand(ControllerInput{ (m_Player == 0 ? SDLK_a : SDLK_LEFT), VK_PAD_DPAD_LEFT, InputType::KeyDown, m_Player }, pMoveLeftDown);
 
 	MoveLeftUpCommand* pMoveLeftUp = new MoveLeftUpCommand(this);
-	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_a, VK_PAD_DPAD_LEFT, InputType::KeyUp, 0 }, pMoveLeftUp);
+	InputManager::GetInstance().AddCommand(ControllerInput{ (m_Player == 0 ? SDLK_a : SDLK_LEFT), VK_PAD_DPAD_LEFT, InputType::KeyUp, m_Player }, pMoveLeftUp);
 
 	ShootCommand* pShoot = new ShootCommand(this);
-	InputManager::GetInstance().AddCommand(ControllerInput{ SDLK_SPACE, VK_PAD_A, InputType::KeyDown, 0 }, pShoot);
+	InputManager::GetInstance().AddCommand(ControllerInput{ (m_Player == 0 ? SDLK_SPACE : SDLK_UP), VK_PAD_A, InputType::KeyDown, m_Player }, pShoot);
+
+	SubjectComponent* subjectComp = new SubjectComponent();
+	m_pGameObject->AddComponent(ComponentType::SubjectComponent, subjectComp);
 }
 
 void dae::SpaceShipComponent::Update(float elapsedSec)
@@ -84,16 +92,22 @@ void dae::SpaceShipComponent::Render(glm::vec2)
 {
 }
 
-void dae::SpaceShipComponent::Trigger(Tag triggerTag, GameObject* pGameObject)
+void dae::SpaceShipComponent::Trigger(Tag triggerTag, GameObject*)
 {
+	AudioLocator::GetAudioSystem()->Play(7);
 	switch (triggerTag)
 	{
 	case Tag::EnemyMissile:
-		pGameObject->SetActive(false);
+		m_pGameObject->GetComponent<SubjectComponent>(ComponentType::SubjectComponent)->Notify(Event::Kill);
+		m_pGalagaManagerComponent->SoftReset();
 		break;
 	case Tag::Enemy:
+		m_pGameObject->GetComponent<SubjectComponent>(ComponentType::SubjectComponent)->Notify(Event::Kill);
+		m_pGalagaManagerComponent->SoftReset();
 		break;
 	case Tag::TractorBeam:
+		m_pGameObject->GetComponent<SubjectComponent>(ComponentType::SubjectComponent)->Notify(Event::Kill);
+		m_pGalagaManagerComponent->SoftReset();
 		break;
 	default:
 		break;
@@ -135,5 +149,6 @@ void dae::SpaceShipComponent::MoveKeyUp(MovementDirection direction)
 
 void dae::SpaceShipComponent::ShootMissile()
 {
-	MissileManager::GetInstance().ShootMissile(m_pGameObject);
+	if (MissileManager::GetInstance().ShootMissile(m_pGameObject))
+		AudioLocator::GetAudioSystem()->Play(2);
 }

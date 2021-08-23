@@ -11,7 +11,7 @@ namespace dae
 		virtual void AddMusic(bool, int, const std::string&) override {};
 		virtual void AddSoundEffect(int, const std::string&) override {};
 
-		virtual void PlaySound(int) override {};
+		virtual void Play(int) override {};
 		virtual void StopAll() override {};
     };
 }

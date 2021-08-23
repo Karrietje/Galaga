@@ -15,33 +15,23 @@ void dae::PointObserver::Notify(Event event)
 {
 	switch (event)
 	{
-	case Event::ColorChange:
-		if (m_pPoints)
-		{
-			m_pPoints->AddPoints(25);
-			std::cout << m_pSubject->GetGameObject()->GetName() << " got 25 points!\n" << "Total points: " << m_pPoints->GetPoints() << " in total!\n";
-		}
+	case Event::ZakoKill:
+		m_pPoints->AddPoints(50);
 		break;
-	case Event::KillByFlyingDisc:
-		if (m_pPoints)
-		{
-			m_pPoints->AddPoints(500);
-			std::cout << m_pSubject->GetGameObject()->GetName() << " got 500 points!\n" << "Total points: " << m_pPoints->GetPoints() << " in total!\n";
-		}
+	case Event::ZakoDivingKill:
+		m_pPoints->AddPoints(100);
 		break;
-	case Event::RemainingDisc:
-		if (m_pPoints)
-		{
-			m_pPoints->AddPoints(50);
-			std::cout << m_pSubject->GetGameObject()->GetName() << " got 50 points!\n" << "Total points: " << m_pPoints->GetPoints() << " in total!\n";
-		}
+	case Event::GoeiKill:
+		m_pPoints->AddPoints(80);
 		break;
-	case Event::CatchingSlickSam:
-		if (m_pPoints)
-		{
-			m_pPoints->AddPoints(300);
-			std::cout << m_pSubject->GetGameObject()->GetName() << " got 300 points!\n" << "Total points: " << m_pPoints->GetPoints() << " in total!\n";
-		}
+	case Event::GoeiDivingKill:
+		m_pPoints->AddPoints(160);
+		break;
+	case Event::BossKill:
+		m_pPoints->AddPoints(150);
+		break;
+	case Event::BossDivingKill:
+		m_pPoints->AddPoints(400);
 		break;
 	default:
 		break;

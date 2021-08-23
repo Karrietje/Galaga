@@ -2,9 +2,10 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "GalagaComponents.h"
+#include "SceneManager.h"
 #include "Scene.h"
 
-void dae::MissileManager::SubscribeGameObject(GameObject* pGameObject, bool isEnemy)
+void dae::MissileManager::SubscribeGameObject(Scene* pScene, GameObject* pGameObject, bool isEnemy)
 {
 	if (m_pMissiles.find(pGameObject) != m_pMissiles.end())
 		return;
@@ -20,11 +21,11 @@ void dae::MissileManager::SubscribeGameObject(GameObject* pGameObject, bool isEn
 
 		m_pMissiles.at(pGameObject).push_back(pMissileComponent);
 
-		m_pScene->Add(pMissile, 3);
+		pScene->Add(pMissile, 3);
 	}
 }
 
-void dae::MissileManager::ShootMissile(GameObject* pGameObject)
+bool dae::MissileManager::ShootMissile(GameObject* pGameObject)
 {
 	for (MissileComponent* pMissile : m_pMissiles.at(pGameObject))
 	{
@@ -33,7 +34,19 @@ void dae::MissileManager::ShootMissile(GameObject* pGameObject)
 		{
 			pMissileObject->GetTransform()->SetPosition(pGameObject->GetTransform()->GetPosition());
 			pMissileObject->SetActive(true);
-			return;
+			return true;
+		}
+	}
+	return false;
+}
+
+void dae::MissileManager::Reset()
+{
+	for (std::pair<GameObject*, std::vector<MissileComponent*>> missiles : m_pMissiles)
+	{
+		for (MissileComponent* pMissile : missiles.second)
+		{
+			pMissile->GetGameObject()->SetActive(false);
 		}
 	}
 }

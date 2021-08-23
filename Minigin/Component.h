@@ -21,6 +21,7 @@ namespace dae
 		Component& operator=(Component&& other) = delete;
 
 		virtual void Initialize() {};
+		virtual void PostInitialize() {};
 		virtual void Update(float elapsedSec) = 0;
 		virtual void Render(glm::vec2 position) = 0;
 
@@ -29,17 +30,17 @@ namespace dae
 		void SetGameObject(GameObject* pGameObject);
 		inline GameObject* GetGameObject()const;
 
-		inline bool IsInitialized() const;
-
 		virtual void Trigger(Tag, GameObject*) {};
 
 	protected:
 		bool m_Initialized;
+		bool m_PostInitialized;
 		bool m_IsActive;
 		GameObject* m_pGameObject;
 
 		friend class GameObject;
 		void RootInitialize();
+		void RootPostInitialize();
 		void RootUpdate(float elapsedSec);
 		void RootRender(glm::vec2 position);
 	};
@@ -47,10 +48,6 @@ namespace dae
 	inline GameObject* dae::Component::GetGameObject() const
 	{
 		return m_pGameObject;
-	}
-	inline bool Component::IsInitialized() const
-	{
-		return m_Initialized;
 	}
 }
 

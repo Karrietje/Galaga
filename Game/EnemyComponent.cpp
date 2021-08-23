@@ -5,10 +5,14 @@
 #include "GalagaComponents.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Audio.h"
+#include "AudioLocator.h"
 
-dae::EnemyComponent::EnemyComponent(EnemyType type)
-	: m_CurrentSpriteSheet{0}
+dae::EnemyComponent::EnemyComponent(EnemyType type, Scene* pScene, bool isControlled)
+	: m_IsControlled{isControlled}
+	, m_CurrentSpriteSheet{0}
 	, m_Type{type}
+	, m_pScene(pScene)
 {
 }
 
@@ -80,7 +84,7 @@ void dae::EnemyComponent::Initialize()
 		TriggerComponent* pTractorBeamTriggerComponent = PhysicsManager::GetInstance().CreateTriggerComponent({ 0, 0 }, { 96, 160 }, Tag::TractorBeam, {});
 		m_pTractorBeam->AddComponent(ComponentType::TriggerComponent, pTractorBeamTriggerComponent);
 
-		SceneManager::GetInstance().GetCurrentScene()->Add(m_pTractorBeam, 4);
+		m_pScene->Add(m_pTractorBeam, 4);
 		m_pGameObject->AddChild(m_pTractorBeam);
 		m_pTractorBeam->GetTransform()->SetPosition({ -32.f, 32.f });
 		m_pTractorBeam->SetActive(false);
@@ -90,8 +94,11 @@ void dae::EnemyComponent::Initialize()
 	TriggerComponent* pTriggerComponent = PhysicsManager::GetInstance().CreateTriggerComponent({ 0.f, 0.f }, { 32.f, 32.f }, Tag::Enemy, { Tag::Spaceship, Tag::Front, Tag::TractorBeamFront, Tag::Missile });
 	m_pGameObject->AddComponent(ComponentType::TriggerComponent, pTriggerComponent);
 
-	m_pAIComponent = new AIComponent(m_Type);
+	m_pAIComponent = new AIComponent(m_pScene, m_Type, m_IsControlled);
 	m_pGameObject->AddComponent(ComponentType::AIComponent, m_pAIComponent);
+
+	SubjectComponent* pSubjectComponent = new SubjectComponent();
+	m_pGameObject->AddComponent(ComponentType::SubjectComponent, pSubjectComponent);
 }
 
 void dae::EnemyComponent::Update(float)
@@ -147,30 +154,50 @@ void dae::EnemyComponent::Render(glm::vec2)
 
 void dae::EnemyComponent::Trigger(Tag triggerTag, GameObject* pGameObject)
 {
+	AIComponent::AIState aiState{ m_pAIComponent->GetState() };
+	SubjectComponent* pSubjectComponent{ m_pGameObject->GetComponent<SubjectComponent>(ComponentType::SubjectComponent) };
 	switch (triggerTag)
 	{
 	case Tag::Spaceship:
 		break;
 	case Tag::Missile:
 		pGameObject->SetActive(false);
+		pSubjectComponent->Notify(Event::Hit);
 		switch (m_Type)
 		{
 		case EnemyType::Zako:
 			m_pGameObject->SetActive(false);
+			AudioLocator::GetAudioSystem()->Play(3);
+			if (aiState == AIComponent::AIState::Idle)
+				pSubjectComponent->Notify(Event::ZakoKill);
+			else
+				pSubjectComponent->Notify(Event::ZakoDivingKill);
 			break;
 		case EnemyType::Goei:
 			m_pGameObject->SetActive(false);
+			AudioLocator::GetAudioSystem()->Play(4);
+			if (aiState == AIComponent::AIState::Idle)
+				pSubjectComponent->Notify(Event::GoeiKill);
+			else
+				pSubjectComponent->Notify(Event::GoeiDivingKill);
 			break;
 		case EnemyType::Boss:
 			if (m_CurrentSpriteSheet == 0)
 			{
+				AudioLocator::GetAudioSystem()->Play(5);
 				m_pSpriteSheetComponents[m_CurrentSpriteSheet]->SetActive(false);
 				m_CurrentSpriteSheet += 1;
 				m_pSpriteSheetComponents[m_CurrentSpriteSheet]->SetActive(true);
+				m_PreviousDirection = MovementDirection::Up;
 			}
 			else if (m_CurrentSpriteSheet == 1)
 			{
 				m_pGameObject->SetActive(false);
+				AudioLocator::GetAudioSystem()->Play(6);
+				if (aiState == AIComponent::AIState::Idle)
+					pSubjectComponent->Notify(Event::BossKill);
+				else
+					pSubjectComponent->Notify(Event::BossDivingKill);
 			}
 			break;
 		default:
@@ -180,4 +207,14 @@ void dae::EnemyComponent::Trigger(Tag triggerTag, GameObject* pGameObject)
 	default:
 		break;
 	}
+}
+
+EnemyType dae::EnemyComponent::GetType() const
+{
+	return m_Type;
+}
+
+void dae::EnemyComponent::Reset()
+{
+	m_pAIComponent->Reset();
 }
